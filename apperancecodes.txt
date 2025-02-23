@@ -1,0 +1,37 @@
+Sabine Brandt:
+06 09 ab 0f ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff f8 (Game start outfit)
+06 08 be 97 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff f8 (Game end outfit)
+
+Nigel Cass:
+06 08 BE 5F FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF F8
+
+Skye Larsen:
+06 08 BE B7 FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF F8
+
+Mary Kelley:
+06 08 BE 47 FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF F8
+
+Thomas Rempart:
+06 0a 40 bf ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff f8
+
+Nicole Pearce (Aiden Pearce's sister):
+06 0a 4c d7 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff f8
+
+Kaitlin Lau:
+06 08 be 2f ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff f8 (Police officer)
+06 09 ae e7 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff f8 (Dirty)
+
+Hamish Bolaji:
+06 08 BE 17 FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF F8
+
+MK II Robot:
+06 0A 68 FA 6B 1F FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF F8
+
+Dalton Wolfe:
+06 08 bd ef ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff f8
+
+Jackson Pearce:
+06 0a 40 b7 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff f8
+
+Stormzy:
+06 09 01 af ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff f8
