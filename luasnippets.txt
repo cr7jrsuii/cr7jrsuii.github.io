@@ -1,0 +1,42 @@
+Spawn Sergei Drone:  
+lua([[
+local loc = GetReticleHitLocation()
+local archetypeToSpawn = "{e082946e-343d-40e6-ac9a-f3e17c31318e}"
+
+if spawnedEnt ~= nil then 
+    RemoveEntity(spawnedEnt) 
+end
+
+spawnedEnt = SpawnEntityFromArchetype(archetypeToSpawn, loc[1], loc[2], loc[3], 0, 0, 0)
+]])
+
+Add 1,000 ETO:  
+lua([[
+TriggerRuleSmithRule('589221860', '', GetLocalPlayerEntityId())
+]])
+
+Add 20,000 ETO:  
+lua([[
+for i = 1, 20 do
+    TriggerRuleSmithRule('589221860', '', GetLocalPlayerEntityId())
+end
+]])
+
+Add 10 Tech Points:  
+lua([[
+TriggerRuleSmithRule('189922678', '', GetLocalPlayerEntityId())
+]])
+
+Toggle Uniformed Access in Restricted Zones:  
+lua([[
+local equipUniform = 1
+
+if HasAccessUniformEquipped(GetLocalPlayerEntityId()) == 1 then
+    equipUniform = 0
+end
+
+EquipAccessUniform(GetLocalPlayerEntityId(), equipUniform)
+]])
+
+Enable God Mode:  
+lua('SetInvincibility(1)')
