@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Over It Chat Kicker</title>
+    <meta name="description" content="Tool to kick people from the Getting Over It chat.">
+    <meta name="keywords" content="Getting Over It, Getting Over It Chat Kicker, Getting Over it Chat">
+    <meta property="og:title" content="Getting Over It Chat Kicker">
+    <meta property="og:description" content="Tool to kick people from the Getting Over It chat.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Getting Over It Chat Kicker">
+    <meta name="twitter:description" content="Tool to kick people from the Getting Over It chat.">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        html,
+        body {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            font-size: 16px;
+            font-family: monospace;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        .content {
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+
+        input,
+        button {
+            background-color: #000000;
+            color: #fff;
+            border: 1px solid #fff;
+            font-size: 16px;
+            padding: 8px 12px;
+            margin-top: 10px;
+            border-radius: 0;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-family: monospace;
+        }
+
+        input:focus,
+        button:focus {
+            outline: none;
+            border-color: #0A84FF;
+        }
+
+        #status {
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background-color: #fff;
+        }
+
+        a {
+            font-family: monospace;
+            color: #0A84FF;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+        h2, h1{
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Getting Over It Chat Kicker</h1>
+        <label for="username">Name:</label>
+        <input type="text" id="username" placeholder="Enter name">
+        <button onclick="connectSocket()">Connect</button>
+        <p id="status"></p>
+        <hr>
+        <h1>About</h1>
+        <p>this tool to kick anyone (as long as they have a name) from the Getting Over It chatroom.</p>
+        <p>When they are kicked, it will send them back to the main menu.</p>
+        <h2>How Does It Work</h2>
+        <p>It works by first joining the chatroom using WS, then setting your name to the same as the person you're trying to kick. The chatroom is badly built because it associates via names, not UUIDs, meaning it will kick both you and the player as long as you have the same name.</p>
+        <p>This tool is a part of a bigger video on how to make your own chatbot for Getting Over It. It will also demonstrate how a player can easily crash the server (no instructions provided).</p>
+        <p>Please subscribe to my YouTube channel (linked below) as it really helps me out.</p>
+        <hr>
+        <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" style="position: static; top: 0px; width: 160px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 48px;"></iframe>
+    </div>
+    <script>
+        function updateStatus(text, color = "black") {
+            const statusEl = document.getElementById("status");
+            statusEl.textContent = text;
+            statusEl.style.color = color;
+        }
+
+        function connectSocket() {
+            const name = document.getElementById("username").value;
+            if (!name) {
+                alert("Please enter a name.");
+                return;
+            }
+
+            updateStatus("Connecting...", "gray");
+
+            socket = io("https://besthikers.herokuapp.com", {
+                transports: ["websocket"],
+                withCredentials: false
+            });
+
+            socket.on("connect", () => {
+                updateStatus("Connected", "green");
+                socket.emit("set name", name, "", "False");
+                socket.emit("chat message", "");
+            });
+
+            socket.on("connect_error", () => {
+                updateStatus("Connection failed", "red");
+            });
+
+            socket.on("kick", (kickData) => {
+                if (kickData.name === name) {
+                    updateStatus("Kicked player successfully.", "red");
+                    socket.disconnect();
+                }
+            });
+
+            socket.on("disconnect", (reason) => {
+                const currentStatus = document.getElementById("status").textContent;
+                if (currentStatus !== "Kicked player successfully.") {
+                    updateStatus("Disconnected", "orange");
+                }
+            });
+
+            socket.on("error", (error) => {
+            updateStatus("Socket Error", "red");
+            });
+        }
+    </script>
+</body>
+</html>
