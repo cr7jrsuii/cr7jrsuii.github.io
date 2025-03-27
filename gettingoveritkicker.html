@@ -12,7 +12,6 @@
     <meta name="twitter:title" content="Getting Over It Chat Kicker">
     <meta name="twitter:description" content="Tool to kick people from the Getting Over It chat.">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <style>
         html,
         body {
@@ -120,54 +119,48 @@
         <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" style="position: static; top: 0px; width: 160px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 48px;"></iframe>
     </div>
     <script>
+        let socket, kicked = false;
+    
         function updateStatus(text, color = "black") {
-            const statusEl = document.getElementById("status");
-            statusEl.textContent = text;
-            statusEl.style.color = color;
+            const el = document.getElementById("status");
+            el.textContent = text;
+            el.style.color = color;
         }
-
+    
         function connectSocket() {
-            const name = document.getElementById("username").value;
-            if (!name) {
-                alert("Please enter a name.");
-                return;
-            }
-
-            updateStatus("Connecting...", "gray");
-
-            socket = io("https://besthikers.herokuapp.com", {
-                transports: ["websocket"],
-                withCredentials: false
-            });
-
-            socket.on("connect", () => {
-                updateStatus("Connected", "green");
-                socket.emit("set name", name, "", "False");
-                socket.emit("chat message", "");
-            });
-
-            socket.on("connect_error", () => {
-                updateStatus("Connection failed", "red");
-            });
-
-            socket.on("kick", (kickData) => {
-                if (kickData.name === name) {
-                    updateStatus("Kicked player successfully.", "red");
-                    socket.disconnect();
+            const name = document.getElementById("username").value.trim();
+            if (!name) return alert("Please enter a name.");
+    
+            updateStatus("Connecting...", "blue");
+            socket = new WebSocket("wss://besthikers.herokuapp.com/socket.io/?EIO=4&transport=websocket");
+    
+            socket.onopen = () => socket.send("40");
+    
+            socket.onmessage = (e) => {
+                const d = e.data;
+    
+                if (d.startsWith("40{")) {
+                    updateStatus("Connected", "green");
+                    socket.send(`42["set name","${name}","","False"]`);
+                    socket.send(`42["chat message",""]`);
                 }
-            });
-
-            socket.on("disconnect", (reason) => {
-                const currentStatus = document.getElementById("status").textContent;
-                if (currentStatus !== "Kicked player successfully.") {
-                    updateStatus("Disconnected", "orange");
+    
+                if (d.startsWith('42["kick"')) {
+                    try {
+                        const msg = JSON.parse(d.slice(2));
+                        if (msg[1]?.name === name) {
+                            kicked = true;
+                            updateStatus("Kicked player successfully.", "red");
+                            socket.send("41");
+                            socket.close();
+                        }
+                    } catch (_) {}
                 }
-            });
-
-            socket.on("error", (error) => {
-            updateStatus("Socket Error", "red");
-            });
+            };
+    
+            socket.onerror = () => updateStatus("Socket Error", "red");
+            socket.onclose = () => !kicked && updateStatus("Disconnected", "orange");
         }
-    </script>
+    </script>    
 </body>
 </html>
