@@ -153,133 +153,140 @@
         <button id="actionBtn" onclick="connectWithName()">Connect</button>
     </div>
     <script>
-        let socket, kicked = false, messagesLoaded = false, userName = "";
-        const chatBox = document.getElementById("chat");
-        const statusEl = document.getElementById("status");
-        const actionBtn = document.getElementById("actionBtn");
-        const inputField = document.getElementById("inputField");
+let socket, kicked = false, messagesLoaded = false, userName = "";
+const chatBox = document.getElementById("chat");
+const statusEl = document.getElementById("status");
+const actionBtn = document.getElementById("actionBtn");
+const inputField = document.getElementById("inputField");
+
+inputField.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            sendMessage();
+        } else {
+            connectWithName();
+        }
+    }
+});
+
+function updateStatus(text, statusClass) {
+    statusEl.textContent = text;
+    statusEl.className = statusClass;
+}
+
+function switchToMessageMode() {
+    inputField.placeholder = "Enter message";
+    inputField.value = "";
+    actionBtn.textContent = "Send";
+    actionBtn.onclick = sendMessage;
+}
+
+function switchToNameMode() {
+    inputField.placeholder = "Enter your name";
+    inputField.value = "";
+    actionBtn.textContent = "Connect";
+    actionBtn.onclick = connectWithName;
+}
+
+function addMessage(msg, className = "") {
+    const msgEl = document.createElement("p");
+    msgEl.textContent = msg;
+    if (className) msgEl.classList.add(className);
+    chatBox.appendChild(msgEl);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function loadMessages(messages) {
+    if (messagesLoaded) return;
+    chatBox.innerHTML = "";
+    messages.forEach(addMessage);
+    messagesLoaded = true;
+}
+
+function sendMessage() {
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+        alert("Not connected to server. Please connect first.");
+        return;
+    }
+    
+    const message = inputField.value.trim();
+    if (!message) return;
+    
+    const formattedMessage = `${userName}: ${message}`;
+    
+    socket.send(`42["chat message","${formattedMessage}"]`);
+    
+    inputField.value = "";
+}
+
+function connectWithName() {
+    userName = inputField.value.trim();
+    if (!userName) {
+        alert("Please enter a name before connecting.");
+        return;
+    }
+    
+    chatBox.innerHTML = "";
+    messagesLoaded = false;
+    updateStatus("Connecting...", "connecting");
+
+    socket = new WebSocket("wss://besthikers.herokuapp.com/socket.io/?EIO=4&transport=websocket");
+
+    socket.onopen = () => {
+        updateStatus("Connected as " + userName, "connected");
+        socket.send("40");
+        switchToMessageMode();
+    };
+
+    socket.onmessage = (e) => {
+        const d = e.data;
         
-        inputField.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                if (socket && socket.readyState === WebSocket.OPEN) {
-                    sendMessage();
-                } else {
-                    connectWithName();
-                }
-            }
-        });
-
-        function updateStatus(text, statusClass) {
-            statusEl.textContent = text;
-            statusEl.className = statusClass;
-        }
-
-        function switchToMessageMode() {
-            inputField.placeholder = "Enter message";
-            inputField.value = "";
-            actionBtn.textContent = "Send";
-            actionBtn.onclick = sendMessage;
-        }
-
-        function switchToNameMode() {
-            inputField.placeholder = "Enter your name";
-            inputField.value = "";
-            actionBtn.textContent = "Connect";
-            actionBtn.onclick = connectWithName;
-        }
-
-        function addMessage(msg, className = "") {
-            const msgEl = document.createElement("p");
-            msgEl.textContent = msg;
-            if (className) msgEl.classList.add(className);
-            chatBox.appendChild(msgEl);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function loadMessages(messages) {
-            if (messagesLoaded) return;
-            chatBox.innerHTML = "";
-            messages.forEach(addMessage);
-            messagesLoaded = true;
+        // Handle the initial 40 message with session ID
+        if (d.startsWith("40{")) {
+            // Send the set name message immediately after receiving the session ID
+            socket.send(`42["set name","","","False"]`);
         }
         
-        function sendMessage() {
-            if (!socket || socket.readyState !== WebSocket.OPEN) {
-                alert("Not connected to server. Please connect first.");
-                return;
-            }
-            
-            const message = inputField.value.trim();
-            if (!message) return;
-            
-            const formattedMessage = `${userName}: ${message}`;
-            
-            socket.send(`42["chat message","${formattedMessage}"]`);
-            
-            inputField.value = "";
+        if (d === "2") {
+            socket.send("3");
         }
-
-        function connectWithName() {
-            userName = inputField.value.trim();
-            if (!userName) {
-                alert("Please enter a name before connecting.");
-                return;
-            }
-            
-            chatBox.innerHTML = "";
-            messagesLoaded = false;
-            updateStatus("Connecting...", "connecting");
-
-            socket = new WebSocket("wss://besthikers.herokuapp.com/socket.io/?EIO=4&transport=websocket");
-
-            socket.onopen = () => {
-                updateStatus("Connected as " + userName, "connected");
-                socket.send("40");
-                switchToMessageMode();
-            };
-
-            socket.onmessage = (e) => {
-                const d = e.data;
-                if (d === "2") {
-                    socket.send("3");
+        if (d.startsWith("42[\"kick\"")) {
+            try {
+                const msg = JSON.parse(d.slice(2));
+                const kickedName = msg[1]?.name;
+                if (kickedName) {
+                    addMessage(`${kickedName} Was Kicked.`, "kicked");
                 }
-                if (d.startsWith("42[\"kick\"")) {
-                    try {
-                        const msg = JSON.parse(d.slice(2));
-                        const kickedName = msg[1]?.name;
-                        if (kickedName) {
-                            addMessage(`${kickedName} Was Kicked.`, "kicked");
-                        }
-                    } catch (_) { }
-                }
-                if (d.startsWith("42[\"chat message\"")) {
-                    try {
-                        const msg = JSON.parse(d.slice(2));
-                        addMessage(msg[1]?.msg || "");
-                    } catch (_) { }
-                }
-                if (d.startsWith("42[\"load messages\"")) {
-                    try {
-                        const msg = JSON.parse(d.slice(2));
-                        if (msg[1]?.type === "array") {
-                            loadMessages(msg[1].msgs);
-                        }
-                    } catch (_) { }
-                }
-            };
-
-            socket.onerror = () => {
-                updateStatus("Disconnected", "disconnected");
-                switchToNameMode();
-            };
-            
-            socket.onclose = () => {
-                if (!kicked) {
-                    updateStatus("Disconnected", "disconnected");
-                    switchToNameMode();
-                }
-            };
+            } catch (_) { }
         }
+        if (d.startsWith("42[\"chat message\"")) {
+            try {
+                const msg = JSON.parse(d.slice(2));
+                addMessage(msg[1]?.msg || "");
+            } catch (_) { }
+        }
+        if (d.startsWith("42[\"load messages\"")) {
+            try {
+                const msg = JSON.parse(d.slice(2));
+                if (msg[1]?.type === "array") {
+                    loadMessages(msg[1].msgs);
+                }
+            } catch (_) { }
+        }
+    };
+
+    socket.onerror = () => {
+        updateStatus("Disconnected", "disconnected");
+        switchToNameMode();
+    };
+    
+    socket.onclose = () => {
+        if (!kicked) {
+            updateStatus("Disconnected", "disconnected");
+            switchToNameMode();
+        }
+    };
+}
     </script>
 </body>
 
