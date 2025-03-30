@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Over It Chat Viewer</title>
+    <meta name="description" content="Tool to view the Getting Over It chat.">
+    <meta name="keywords" content="Getting Over It, Getting Over It Chat Viewer, Getting Over it Chat">
+    <meta property="og:title" content="Getting Over It Chat Viewer">
+    <meta property="og:description" content="Tool to view the Getting Over It chat.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Getting Over It Chat Viewer">
+    <meta name="twitter:description" content="Tool to view the Getting Over It chat.">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: monospace;
+            text-align: center;
+            padding: 10px;
+            margin: 0;
+        }
+
+        input,
+        button {
+            background: #000;
+            color: #fff;
+            border: 1px solid #fff;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        #chat {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            border: 1px solid #fff;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            text-align: left;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        #chat p {
+            margin: 0;
+            padding: 0;
+            word-wrap: break-word;
+        }
+
+        .kicked {
+            color: red;
+        }
+
+        #status {
+            margin-top: 2px;
+            margin-bottom: 2px;
+            font-size: 16px;
+        }
+
+        .waiting {
+            color: orange;
+        }
+
+        .connecting {
+            color: blue;
+        }
+
+        .connected {
+            color: lime;
+        }
+
+        .disconnected {
+            color: red;
+        }
+        
+        hr {
+            border: none;
+            height: 1px;
+            background-color: #fff;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 15px auto;
+            box-sizing: border-box;
+        }
+
+        #inputField {
+            flex-grow: 1;
+            min-width: 0;
+            border-right: none;
+        }
+
+        button {
+            min-width: 80px;
+            white-space: nowrap;
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            
+            h1 {
+                font-size: 1.2rem;
+            }
+            
+            #chat {
+                height: 250px;
+                padding: 5px;
+                margin-bottom: 10px;
+            }
+            
+            button {
+                min-width: 60px;
+                padding: 8px 5px;
+            }
+            
+            input, button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Getting Over It Chat Viewer</h1>
+    <p id="status" class="waiting">Not Connected</p>
+    <div id="chat">
+        <p>Tool to view <span style="color: blue;">Getting Over It</span> chat and send messages.</p>
+        <p>Messages you send will appear as <span style="color: red;">: Name: Message</span>. This is because it is not using "set name." This also has a decent side effect of you not being able to be kicked by anyone.</p>
+        <p>Old messages are sent in a message array. These do not contain any names. Only new messages do.</p>
+        <p>This video is part of a bigger project of <span style="color: blue;">Getting Over It</span>. Please subscribe to my <span style="color: red;">YouTube</span> channel, as it really helps me out.</p>           
+        <hr>        
+        <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" style="position: static; top: 0px; width: 160px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 48px;" title="Subscribe to Meatboxing on YouTube"></iframe>
+    </div>
+    <div class="input-container">
+        <input type="text" id="inputField" placeholder="Enter your name">
+        <button id="actionBtn" onclick="connectWithName()">Connect</button>
+    </div>
+    <script>
+        let socket, kicked = false, messagesLoaded = false, userName = "";
+        const chatBox = document.getElementById("chat");
+        const statusEl = document.getElementById("status");
+        const actionBtn = document.getElementById("actionBtn");
+        const inputField = document.getElementById("inputField");
+        
+        inputField.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    sendMessage();
+                } else {
+                    connectWithName();
+                }
+            }
+        });
+
+        function updateStatus(text, statusClass) {
+            statusEl.textContent = text;
+            statusEl.className = statusClass;
+        }
+
+        function switchToMessageMode() {
+            inputField.placeholder = "Enter message";
+            inputField.value = "";
+            actionBtn.textContent = "Send";
+            actionBtn.onclick = sendMessage;
+        }
+
+        function switchToNameMode() {
+            inputField.placeholder = "Enter your name";
+            inputField.value = "";
+            actionBtn.textContent = "Connect";
+            actionBtn.onclick = connectWithName;
+        }
+
+        function addMessage(msg, className = "") {
+            const msgEl = document.createElement("p");
+            msgEl.textContent = msg;
+            if (className) msgEl.classList.add(className);
+            chatBox.appendChild(msgEl);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function loadMessages(messages) {
+            if (messagesLoaded) return;
+            chatBox.innerHTML = "";
+            messages.forEach(addMessage);
+            messagesLoaded = true;
+        }
+        
+        function sendMessage() {
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
+                alert("Not connected to server. Please connect first.");
+                return;
+            }
+            
+            const message = inputField.value.trim();
+            if (!message) return;
+            
+            const formattedMessage = `${userName}: ${message}`;
+            
+            socket.send(`42["chat message","${formattedMessage}"]`);
+            
+            inputField.value = "";
+        }
+
+        function connectWithName() {
+            userName = inputField.value.trim();
+            if (!userName) {
+                alert("Please enter a name before connecting.");
+                return;
+            }
+            
+            chatBox.innerHTML = "";
+            messagesLoaded = false;
+            updateStatus("Connecting...", "connecting");
+
+            socket = new WebSocket("wss://besthikers.herokuapp.com/socket.io/?EIO=4&transport=websocket");
+
+            socket.onopen = () => {
+                updateStatus("Connected as " + userName, "connected");
+                socket.send("40");
+                switchToMessageMode();
+            };
+
+            socket.onmessage = (e) => {
+                const d = e.data;
+                if (d === "2") {
+                    socket.send("3");
+                }
+                if (d.startsWith("42[\"kick\"")) {
+                    try {
+                        const msg = JSON.parse(d.slice(2));
+                        const kickedName = msg[1]?.name;
+                        if (kickedName) {
+                            addMessage(`${kickedName} Was Kicked.`, "kicked");
+                        }
+                    } catch (_) { }
+                }
+                if (d.startsWith("42[\"chat message\"")) {
+                    try {
+                        const msg = JSON.parse(d.slice(2));
+                        addMessage(msg[1]?.msg || "");
+                    } catch (_) { }
+                }
+                if (d.startsWith("42[\"load messages\"")) {
+                    try {
+                        const msg = JSON.parse(d.slice(2));
+                        if (msg[1]?.type === "array") {
+                            loadMessages(msg[1].msgs);
+                        }
+                    } catch (_) { }
+                }
+            };
+
+            socket.onerror = () => {
+                updateStatus("Disconnected", "disconnected");
+                switchToNameMode();
+            };
+            
+            socket.onclose = () => {
+                if (!kicked) {
+                    updateStatus("Disconnected", "disconnected");
+                    switchToNameMode();
+                }
+            };
+        }
+    </script>
+</body>
+
+</html>
