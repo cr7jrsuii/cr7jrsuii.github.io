@@ -214,7 +214,8 @@ function sendMessage() {
     
     const formattedMessage = `${userName}: ${message}`;
     
-    socket.send(`42["chat message","${formattedMessage}"]`);
+    const payload = JSON.stringify(["chat message", formattedMessage]);
+    socket.send(`42${payload}`);
     
     inputField.value = "";
 }
