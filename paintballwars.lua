@@ -33,6 +33,12 @@ local savedLighting = {
     FogEnd = Lighting.FogEnd,
     GlobalShadows = Lighting.GlobalShadows
 }
+local skinChangerEnabled = false
+local skinTextureId = ""
+local skinColor = Color3.new(1, 1, 1)
+local skinMaterial = Enum.Material.Plastic
+local originalGunColors = {}
+local originalGunTextures = {}
 
 local function isEnemyPlayer(plr)
     return plr ~= LocalPlayer and plr.Team ~= LocalPlayer.Team
@@ -161,6 +167,131 @@ local function refreshColors()
     end
 end
 
+local function applySkinToGun()
+    local cam = Workspace.CurrentCamera
+    for _, item in ipairs(cam:GetChildren()) do
+        local weaponModel = item:FindFirstChild("WeaponModel")
+        if weaponModel then
+            local gunModel = weaponModel:FindFirstChild("Gun")
+            if gunModel then
+                for _, gunPart in ipairs(gunModel:GetDescendants()) do
+                    if gunPart:IsA("BasePart") then
+                        if not originalGunColors[gunPart] then
+                            originalGunColors[gunPart] = gunPart.Color
+                        end
+                        
+                        if not originalGunTextures[gunPart] then
+                            originalGunTextures[gunPart] = {}
+                            for _, child in ipairs(gunPart:GetChildren()) do
+                                if child:IsA("Texture") then
+                                    table.insert(originalGunTextures[gunPart], {
+                                        Face = child.Face,
+                                        Texture = child.Texture,
+                                        Color3 = child.Color3,
+                                        Transparency = child.Transparency,
+                                        OffsetStudsU = child.OffsetStudsU,
+                                        OffsetStudsV = child.OffsetStudsV,
+                                        StudsPerTileU = child.StudsPerTileU,
+                                        StudsPerTileV = child.StudsPerTileV,
+                                        ZIndex = child.ZIndex
+                                    })
+                                end
+                            end
+                        end
+                        
+                        gunPart.Color = skinColor
+                        gunPart.Material = skinMaterial
+                        
+                        for _, child in ipairs(gunPart:GetChildren()) do
+                            if child:IsA("Texture") then
+                                child:Destroy()
+                            end
+                        end
+                        
+                        if skinTextureId ~= "" then
+                            local finalTexture = skinTextureId
+                            local textureIdNumber = tonumber(skinTextureId)
+                            
+                            if textureIdNumber then
+                                local correctedId = textureIdNumber - 1
+                                finalTexture = "http://www.roblox.com/asset/?id=" .. correctedId
+                            end
+                            
+                            local faces = {
+                                Enum.NormalId.Front,
+                                Enum.NormalId.Back,
+                                Enum.NormalId.Top,
+                                Enum.NormalId.Bottom,
+                                Enum.NormalId.Right,
+                                Enum.NormalId.Left
+                            }
+                            
+                            for i, face in ipairs(faces) do
+                                local texture = Instance.new("Texture")
+                                texture.Name = tostring(i)
+                                texture.Face = face
+                                texture.Color3 = Color3.fromRGB(255, 255, 255)
+                                texture.OffsetStudsU = 0
+                                texture.OffsetStudsV = 0
+                                texture.StudsPerTileU = 1
+                                texture.StudsPerTileV = 1
+                                texture.Texture = finalTexture
+                                texture.Transparency = 0
+                                texture.ZIndex = 1
+                                texture.Parent = gunPart
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+local function removeSkinFromGun()
+    local cam = Workspace.CurrentCamera
+    for _, item in ipairs(cam:GetChildren()) do
+        local weaponModel = item:FindFirstChild("WeaponModel")
+        if weaponModel then
+            local gunModel = weaponModel:FindFirstChild("Gun")
+            if gunModel then
+                for _, gunPart in ipairs(gunModel:GetDescendants()) do
+                    if gunPart:IsA("BasePart") then
+                        if originalGunColors[gunPart] then
+                            gunPart.Color = originalGunColors[gunPart]
+                        end
+                        gunPart.Material = Enum.Material.Plastic
+                        
+                        for _, child in ipairs(gunPart:GetChildren()) do
+                            if child:IsA("Texture") then
+                                child:Destroy()
+                            end
+                        end
+                        
+                        if originalGunTextures[gunPart] then
+                            for _, textureData in ipairs(originalGunTextures[gunPart]) do
+                                local texture = Instance.new("Texture")
+                                texture.Face = textureData.Face
+                                texture.Texture = textureData.Texture
+                                texture.Color3 = textureData.Color3
+                                texture.Transparency = textureData.Transparency
+                                texture.OffsetStudsU = textureData.OffsetStudsU
+                                texture.OffsetStudsV = textureData.OffsetStudsV
+                                texture.StudsPerTileU = textureData.StudsPerTileU
+                                texture.StudsPerTileV = textureData.StudsPerTileV
+                                texture.ZIndex = textureData.ZIndex
+                                texture.Parent = gunPart
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    originalGunColors = {}
+    originalGunTextures = {}
+end
+
 local aimCircle = Drawing.new("Circle")
 aimCircle.Thickness = 2
 aimCircle.NumSides = 64
@@ -229,6 +360,10 @@ end
 RunService.RenderStepped:Connect(function()
     refreshCircle()
     
+    if skinChangerEnabled then
+        applySkinToGun()
+    end
+    
     if fovChangerEnabled then
         local cam = Workspace.CurrentCamera
         cam.FieldOfView = cameraFOV
@@ -293,9 +428,7 @@ end)
 
 local LinoriaLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/Library.lua"))()
 local Window = LinoriaLib:CreateWindow({Title = "Paintball Wars! Script", Center = true, AutoShow = true})
-local Tabs = {
-    General = Window:AddTab("General")
-}
+local Tabs = {General = Window:AddTab("General")}
 
 local MainBox = Tabs.General:AddLeftTabbox("Main")
 local Main = MainBox:AddTab("Main")
@@ -424,6 +557,60 @@ Options.SkyColor:OnChanged(function()
     skyColor = Options.SkyColor.Value
 end)
 
+local SkinChangerBox = Tabs.General:AddLeftTabbox("Skin Changer")
+local SkinChanger = SkinChangerBox:AddTab("Skin Changer")
+
+SkinChanger:AddToggle("SkinChangerEnabled", {Text = "Enabled", Default = false, Callback = function(val)
+    skinChangerEnabled = val
+    if val then
+        applySkinToGun()
+    else
+        removeSkinFromGun()
+    end
+end})
+
+SkinChanger:AddInput("SkinTextureID", {
+    Default = "",
+    Numeric = false,
+    Finished = true,
+    Text = "ID",
+    Placeholder = "Enter Texture ID or URL",
+    Callback = function(val)
+        skinTextureId = val
+        if skinChangerEnabled then
+            applySkinToGun()
+        end
+    end
+})
+
+SkinChanger:AddLabel("Color"):AddColorPicker("SkinColor", {Default = Color3.new(1, 1, 1)})
+
+Options.SkinColor:OnChanged(function()
+    skinColor = Options.SkinColor.Value
+    if skinChangerEnabled then
+        applySkinToGun()
+    end
+end)
+
+local materialList = {}
+for _, material in pairs(Enum.Material:GetEnumItems()) do
+    table.insert(materialList, material.Name)
+end
+table.sort(materialList)
+
+SkinChanger:AddDropdown("SkinMaterial", {
+    Values = materialList,
+    Default = 1,
+    Multi = false,
+    Text = "Material",
+    Callback = function(val)
+        skinMaterial = Enum.Material[val]
+        if skinChangerEnabled then
+            applySkinToGun()
+        end
+    end
+})
+
 local AimbotBox = Tabs.General:AddRightTabbox("Aimbot")
 local Aimbot = AimbotBox:AddTab("Aimbot")
 
@@ -469,16 +656,28 @@ end})
 
 local CreditsBox = Tabs.General:AddRightTabbox("Credits")
 local Credits = CreditsBox:AddTab("Credits")
-Credits:AddButton({Text = 'Subscrube to MeatBoxing', Func = function() setclipboard('https://www.youtube.com/@meatboxing'); LinoriaLib:Notify('Copied Link') end, Tooltip = 'For creating this script'})
+Credits:AddButton({
+    Text = 'Subscrube to MeatBoxing',
+    Func = function()
+        setclipboard('https://www.youtube.com/@meatboxing')
+        LinoriaLib:Notify('Copied Link')
+    end,
+    Tooltip = 'For creating this script'
+})
 
 local ConfigBox = Tabs.General:AddRightTabbox("Config")
 local Config = ConfigBox:AddTab("Config")
-
 local configPath = "paintballwarsconfig.json"
 
 local function saveConfig()
     local configData = {
         weaponMods = Toggles.WeaponMods.Value,
+        skinChanger = Toggles.SkinChangerEnabled.Value,
+        skinTextureId = tostring(skinTextureId),
+        skinColorR = skinColor.R,
+        skinColorG = skinColor.G,
+        skinColorB = skinColor.B,
+        skinMaterial = skinMaterial.Name,
         boxes = Toggles.ESPBoxes.Value,
         boxColorR = boxColor.R,
         boxColorG = boxColor.G,
@@ -489,7 +688,7 @@ local function saveConfig()
         fullbright = Toggles.Fullbright.Value,
         timeChanger = Toggles.TimeEnabled.Value,
         customTime = customTime,
-        skyColor = Toggles.SkyColorEnabled.Value,
+        skyColorEnabled = Toggles.SkyColorEnabled.Value,
         skyColorR = skyColor.R,
         skyColorG = skyColor.G,
         skyColorB = skyColor.B,
@@ -507,24 +706,61 @@ local function saveConfig()
 end
 
 local function loadConfig()
-    if not isfile(configPath) then LinoriaLib:Notify('No config found!') return end
+    if not isfile(configPath) then
+        LinoriaLib:Notify('No config found!')
+        return
+    end
+    
     local configData = game:GetService("HttpService"):JSONDecode(readfile(configPath))
+    
     Toggles.WeaponMods:SetValue(configData.weaponMods or false)
+    
+    if configData.skinTextureId then
+        skinTextureId = configData.skinTextureId
+        Options.SkinTextureID:SetValue(configData.skinTextureId)
+    end
+    
+    if configData.skinMaterial then
+        skinMaterial = Enum.Material[configData.skinMaterial]
+        Options.SkinMaterial:SetValue(configData.skinMaterial)
+    end
+    
+    if configData.skinColorR and configData.skinColorG and configData.skinColorB then
+        skinColor = Color3.new(configData.skinColorR, configData.skinColorG, configData.skinColorB)
+        Options.SkinColor:SetValueRGB(skinColor)
+    end
+    
+    Toggles.SkinChangerEnabled:SetValue(configData.skinChanger or false)
+    
+    if configData.boxColorR and configData.boxColorG and configData.boxColorB then
+        boxColor = Color3.new(configData.boxColorR, configData.boxColorG, configData.boxColorB)
+        Options.ESPColor:SetValueRGB(boxColor)
+    end
+    
     Toggles.ESPBoxes:SetValue(configData.boxes or false)
-    Options.ESPColor:SetValue(Color3.new(configData.boxColorR, configData.boxColorG, configData.boxColorB))
     Toggles.Tracers:SetValue(configData.tracers or false)
     Toggles.FOVEnabled:SetValue(configData.fovChanger or false)
-    Options.CustomFOV:SetValue(configData.customFOV)
+    Options.CustomFOV:SetValue(configData.customFOV or 70)
     Toggles.Fullbright:SetValue(configData.fullbright or false)
     Toggles.TimeEnabled:SetValue(configData.timeChanger or false)
-    Options.CustomTime:SetValue(configData.customTime)
-    Toggles.SkyColorEnabled:SetValue(configData.skyColor or false)
-    Options.SkyColor:SetValue(Color3.new(configData.skyColorR, configData.skyColorG, configData.skyColorB))
+    Options.CustomTime:SetValue(configData.customTime or 12)
+    
+    if configData.skyColorR and configData.skyColorG and configData.skyColorB then
+        skyColor = Color3.new(configData.skyColorR, configData.skyColorG, configData.skyColorB)
+        Options.SkyColor:SetValueRGB(skyColor)
+    end
+    
+    Toggles.SkyColorEnabled:SetValue(configData.skyColorEnabled or false)
     Toggles.AimbotEnabled:SetValue(configData.aimbot or false)
-    Options.AimbotPart:SetValue(configData.aimbotPart)
-    Options.AimbotFOV:SetValue(configData.aimbotFOV)
+    Options.AimbotPart:SetValue(configData.aimbotPart or "HumanoidRootPart")
+    Options.AimbotFOV:SetValue(configData.aimbotFOV or 100)
+    
+    if configData.fovCircleColorR and configData.fovCircleColorG and configData.fovCircleColorB then
+        circleColor = Color3.new(configData.fovCircleColorR, configData.fovCircleColorG, configData.fovCircleColorB)
+        Options.FOVCircleColor:SetValueRGB(circleColor)
+    end
+    
     Toggles.ShowFOVCircle:SetValue(configData.showFOVCircle or false)
-    Options.FOVCircleColor:SetValue(Color3.new(configData.fovCircleColorR, configData.fovCircleColorG, configData.fovCircleColorB))
     Toggles.VisibleCheck:SetValue(configData.visibleCheck or false)
     LinoriaLib:Notify('Config loaded!')
 end
@@ -532,7 +768,12 @@ end
 Config:AddButton({Text = 'Save Config', Func = saveConfig})
 Config:AddButton({Text = 'Load Config', Func = loadConfig})
 Config:AddButton({Text = 'Delete Config', Func = function()
-    if isfile(configPath) then delfile(configPath) LinoriaLib:Notify('Config deleted!') else LinoriaLib:Notify('No config to delete!') end
+    if isfile(configPath) then
+        delfile(configPath)
+        LinoriaLib:Notify('Config deleted!')
+    else
+        LinoriaLib:Notify('No config to delete!')
+    end
 end})
 
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
