@@ -6,13 +6,13 @@ gui.Name = "ModuleEditor"
 gui.Parent = CoreGui
 
 local main = Instance.new("Frame")
-main.Size = UDim2.new(0.95, 0, 0, 450)
-main.Position = UDim2.new(0.025, 0, 0.5, -225)
+main.Size = UDim2.new(0, 700, 0, 450)
+main.Position = UDim2.new(0.5, -350, 0.5, -225)
 main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 main.Parent = gui
 
 local header = Instance.new("Frame")
-header.Size = UDim2.new(1, 0, 0, 40)
+header.Size = UDim2.new(1, 0, 0, 30)
 header.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 header.Parent = main
 
@@ -24,22 +24,22 @@ title.TextColor3 = Color3.new(1, 1, 1)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 14
 title.TextXAlignment = Enum.TextXAlignment.Left
-title.Text = "Module Editor"
+title.Text = "ModuleScript Editor"
 title.Parent = header
 
 local collapseBtn = Instance.new("TextButton")
-collapseBtn.Size = UDim2.new(0, 35, 0, 30)
-collapseBtn.Position = UDim2.new(1, -40, 0, 5)
+collapseBtn.Size = UDim2.new(0, 30, 0, 20)
+collapseBtn.Position = UDim2.new(1, -35, 0, 5)
 collapseBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 collapseBtn.TextColor3 = Color3.new(1, 1, 1)
 collapseBtn.Font = Enum.Font.GothamBold
-collapseBtn.TextSize = 16
+collapseBtn.TextSize = 14
 collapseBtn.Text = "−"
 collapseBtn.Parent = header
 
 local pathBox = Instance.new("TextBox")
-pathBox.Size = UDim2.new(1, -20, 0, 35)
-pathBox.Position = UDim2.new(0, 10, 0, 50)
+pathBox.Size = UDim2.new(1, -120, 0, 25)
+pathBox.Position = UDim2.new(0, 10, 0, 40)
 pathBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 pathBox.TextColor3 = Color3.new(1, 1, 1)
 pathBox.Font = Enum.Font.Code
@@ -49,34 +49,30 @@ pathBox.ClearTextOnFocus = false
 pathBox.Parent = main
 
 local loadBtn = Instance.new("TextButton")
-loadBtn.Size = UDim2.new(0.48, -7.5, 0, 35)
-loadBtn.Position = UDim2.new(0, 10, 0, 95)
+loadBtn.Size = UDim2.new(0, 50, 0, 25)
+loadBtn.Position = UDim2.new(1, -110, 0, 40)
 loadBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 loadBtn.TextColor3 = Color3.new(1, 1, 1)
-loadBtn.Font = Enum.Font.GothamBold
-loadBtn.TextSize = 14
 loadBtn.Text = "Load"
 loadBtn.Parent = main
 
 local saveBtn = Instance.new("TextButton")
-saveBtn.Size = UDim2.new(0.48, -7.5, 0, 35)
-saveBtn.Position = UDim2.new(0.52, 5, 0, 95)
+saveBtn.Size = UDim2.new(0, 50, 0, 25)
+saveBtn.Position = UDim2.new(1, -55, 0, 40)
 saveBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 saveBtn.TextColor3 = Color3.new(1, 1, 1)
-saveBtn.Font = Enum.Font.GothamBold
-saveBtn.TextSize = 14
 saveBtn.Text = "Save"
 saveBtn.Parent = main
 
 local scroll = Instance.new("ScrollingFrame")
-scroll.Size = UDim2.new(1, -20, 1, -160)
-scroll.Position = UDim2.new(0, 10, 0, 140)
+scroll.Size = UDim2.new(1, -20, 1, -85)
+scroll.Position = UDim2.new(0, 10, 0, 70)
 scroll.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-scroll.ScrollBarThickness = 8
+scroll.ScrollBarThickness = 6
 scroll.Parent = main
 
 local editor = Instance.new("TextBox")
-editor.Size = UDim2.new(1, -8, 1, 0)
+editor.Size = UDim2.new(1, -6, 1, 0)
 editor.BackgroundTransparency = 1
 editor.TextColor3 = Color3.new(1, 1, 1)
 editor.Font = Enum.Font.Code
@@ -91,12 +87,12 @@ editor.ClipsDescendants = false
 editor.Parent = scroll
 
 local status = Instance.new("TextLabel")
-status.Size = UDim2.new(1, -20, 0, 20)
-status.Position = UDim2.new(0, 10, 1, -20)
+status.Size = UDim2.new(1, -20, 0, 15)
+status.Position = UDim2.new(0, 10, 1, -15)
 status.BackgroundTransparency = 1
 status.TextColor3 = Color3.fromRGB(150, 150, 150)
 status.Font = Enum.Font.Code
-status.TextSize = 11
+status.TextSize = 12
 status.Text = "Ready"
 status.Parent = main
 
