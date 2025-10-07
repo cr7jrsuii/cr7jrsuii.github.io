@@ -24,7 +24,7 @@ title.TextColor3 = Color3.new(1, 1, 1)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 14
 title.TextXAlignment = Enum.TextXAlignment.Left
-title.Text = "Module Editor"
+title.Text = "ModuleScript Editor"
 title.Parent = header
 
 local pathBox = Instance.new("TextBox")
