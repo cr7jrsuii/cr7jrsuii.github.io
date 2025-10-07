@@ -1,157 +1,37 @@
-local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
-local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
 
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "DeltaKeyHelper"
-screenGui.ResetOnSpawn = false
-screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-screenGui.Parent = playerGui
+local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 
-local container = Instance.new("Frame")
-container.Name = "Container"
-container.Size = UDim2.new(0, 200, 0, 120)
-container.Position = UDim2.new(1, -210, 0.5, -60)
-container.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-container.BorderSizePixel = 0
-container.Active = true
-container.Draggable = true
-container.Parent = screenGui
-
-local containerCorner = Instance.new("UICorner")
-containerCorner.CornerRadius = UDim.new(0, 10)
-containerCorner.Parent = container
-
-local titleBar = Instance.new("Frame")
-titleBar.Name = "TitleBar"
-titleBar.Size = UDim2.new(1, 0, 0, 30)
-titleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-titleBar.BorderSizePixel = 0
-titleBar.Parent = container
-
-local titleCorner = Instance.new("UICorner")
-titleCorner.CornerRadius = UDim.new(0, 10)
-titleCorner.Parent = titleBar
-
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -40, 1, 0)
-title.Position = UDim2.new(0, 10, 0, 0)
-title.BackgroundTransparency = 1
-title.Text = "Delta Keys"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.TextSize = 14
-title.Font = Enum.Font.GothamBold
-title.TextXAlignment = Enum.TextXAlignment.Left
-title.Parent = titleBar
-
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0, 25, 0, 25)
-closeButton.Position = UDim2.new(1, -28, 0, 2.5)
-closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-closeButton.Text = "X"
-closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-closeButton.TextSize = 12
-closeButton.Font = Enum.Font.GothamBold
-closeButton.BorderSizePixel = 0
-closeButton.Parent = titleBar
-
-local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 5)
-closeCorner.Parent = closeButton
-
-closeButton.MouseButton1Click:Connect(function()
-    screenGui:Destroy()
-end)
-
-local homeButton = Instance.new("TextButton")
-homeButton.Name = "HomeButton"
-homeButton.Size = UDim2.new(1, -20, 0, 35)
-homeButton.Position = UDim2.new(0, 10, 0, 40)
-homeButton.BackgroundColor3 = Color3.fromRGB(60, 120, 200)
-homeButton.Text = "HOME"
-homeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-homeButton.TextSize = 16
-homeButton.Font = Enum.Font.GothamBold
-homeButton.BorderSizePixel = 0
-homeButton.Parent = container
-
-local homeCorner = Instance.new("UICorner")
-homeCorner.CornerRadius = UDim.new(0, 8)
-homeCorner.Parent = homeButton
-
-local endButton = Instance.new("TextButton")
-endButton.Name = "EndButton"
-endButton.Size = UDim2.new(1, -20, 0, 35)
-endButton.Position = UDim2.new(0, 10, 0, 80)
-endButton.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
-endButton.Text = "END"
-endButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-endButton.TextSize = 16
-endButton.Font = Enum.Font.GothamBold
-endButton.BorderSizePixel = 0
-endButton.Parent = container
-
-local endCorner = Instance.new("UICorner")
-endCorner.CornerRadius = UDim.new(0, 8)
-endCorner.Parent = endButton
-
--- Visual feedback function
-local function flashButton(button)
-    local originalColor = button.BackgroundColor3
-    button.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    task.wait(0.1)
-    button.BackgroundColor3 = originalColor
+if isMobile then
+    print("Player is on mobile")
+else
+    print("Player is on PC")
 end
 
-homeButton.MouseButton1Click:Connect(function()
-    flashButton(homeButton)
-    local connection
-    connection = UserInputService.InputBegan:Connect(function(input)
-        if input.KeyCode == Enum.KeyCode.Home then
-            connection:Disconnect()
-        end
-    end)
-    
-    local virtualInput = {
-        KeyCode = Enum.KeyCode.Home,
-        UserInputType = Enum.UserInputType.Keyboard
-    }
-    
-    for _, v in game:GetDescendants() do
-        if v:IsA("BindableEvent") and v.Name == "InputBegan" then
-            pcall(function()
-                v:Fire(virtualInput)
-            end)
-        end
-    end
-    
-    print("HOME key simulated")
-end)
+local isMobile2 = UserInputService.TouchEnabled and not UserInputService.MouseEnabled
 
-endButton.MouseButton1Click:Connect(function()
-    flashButton(endButton)
-    local connection
-    connection = UserInputService.InputBegan:Connect(function(input)
-        if input.KeyCode == Enum.KeyCode.End then
-            connection:Disconnect()
-        end
-    end)
-    
-    local virtualInput = {
-        KeyCode = Enum.KeyCode.End,
-        UserInputType = Enum.UserInputType.Keyboard
-    }
-    
-    for _, v in game:GetDescendants() do
-        if v:IsA("BindableEvent") and v.Name == "InputBegan" then
-            pcall(function()
-                v:Fire(virtualInput)
-            end)
-        end
-    end
-    
-    print("END key simulated")
-end)
+local GuiService = game:GetService("GuiService")
 
-print("Delta Key Helper Loaded")
+local isMobile3 = GuiService:IsTenFootInterface() == false and UserInputService.TouchEnabled
+
+local function getPlatform()
+    if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
+        return "Mobile"
+    elseif UserInputService.KeyboardEnabled and UserInputService.MouseEnabled then
+        return "PC"
+    elseif UserInputService.GamepadEnabled then
+        return "Console"
+    else
+        return "Unknown"
+    end
+end
+
+print("Platform:", getPlatform())
+
+local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+
+if isMobile then
+    print("Mobile controls enabled")
+else
+    print("PC controls")
+end
