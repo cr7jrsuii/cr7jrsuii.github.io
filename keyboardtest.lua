@@ -17,7 +17,7 @@ header.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 header.Parent = main
 
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -50, 1, 0)
+title.Size = UDim2.new(1, -10, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -108,7 +108,7 @@ local function toggleCollapse()
 	isCollapsed = not isCollapsed
 	
 	if isCollapsed then
-		main.Size = UDim2.new(0.95, 0, 0, 40)
+		main.Size = UDim2.new(0, 700, 0, 30)
 		collapseBtn.Text = "+"
 		pathBox.Visible = false
 		loadBtn.Visible = false
@@ -116,7 +116,7 @@ local function toggleCollapse()
 		scroll.Visible = false
 		status.Visible = false
 	else
-		main.Size = UDim2.new(0.95, 0, 0, 450)
+		main.Size = UDim2.new(0, 700, 0, 450)
 		collapseBtn.Text = "−"
 		pathBox.Visible = true
 		loadBtn.Visible = true
@@ -202,7 +202,7 @@ editor:GetPropertyChangedSignal("Text"):Connect(updateScroll)
 
 local dragging, dragStart, startPos
 header.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
 		dragging = true
 		dragStart = input.Position
 		startPos = main.Position
@@ -210,14 +210,14 @@ header.InputBegan:Connect(function(input)
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
 		local delta = input.Position - dragStart
 		main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 	end
 end)
 
 UserInputService.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
 		dragging = false
 	end
 end)
