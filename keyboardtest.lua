@@ -108,7 +108,7 @@ local function toggleCollapse()
 	isCollapsed = not isCollapsed
 	
 	if isCollapsed then
-		main.Size = UDim2.new(0, 700, 0, 30)
+		main.Size = UDim2.new(0, 40, 0, 30)
 		collapseBtn.Text = "+"
 		title.Visible = false
 		pathBox.Visible = false
