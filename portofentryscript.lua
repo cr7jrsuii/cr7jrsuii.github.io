@@ -213,7 +213,7 @@ ShopTab:AddButton({Text = 'Invalid Passport ($10)', Func = function()
     end
 end})
 
-ShopTab:AddButton({Text = 'MicroDraco ($300)', Func = function()
+ShopTab:AddButton({Text = 'AK74 ($300)', Func = function()
     local player = game:GetService("Players").LocalPlayer
     local character = player.Character
     if character then
@@ -229,7 +229,7 @@ ShopTab:AddButton({Text = 'MicroDraco ($300)', Func = function()
     end
 end})
 
-ShopTab:AddButton({Text = 'AK74 ($750)', Func = function()
+ShopTab:AddButton({Text = 'MicroDraco ($750)', Func = function()
     local player = game:GetService("Players").LocalPlayer
     local character = player.Character
     if character then
