@@ -24,7 +24,7 @@ title.TextColor3 = Color3.new(1, 1, 1)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 14
 title.TextXAlignment = Enum.TextXAlignment.Left
-title.Text = "ModuleScript Editor"
+title.Text = "ModuleScript Editor [Mobile]"
 title.Parent = header
 
 local collapseBtn = Instance.new("TextButton")
@@ -110,6 +110,7 @@ local function toggleCollapse()
 	if isCollapsed then
 		main.Size = UDim2.new(0, 700, 0, 30)
 		collapseBtn.Text = "+"
+		title.Visible = false
 		pathBox.Visible = false
 		loadBtn.Visible = false
 		saveBtn.Visible = false
@@ -118,6 +119,7 @@ local function toggleCollapse()
 	else
 		main.Size = UDim2.new(0, 700, 0, 450)
 		collapseBtn.Text = "−"
+		title.Visible = true
 		pathBox.Visible = true
 		loadBtn.Visible = true
 		saveBtn.Visible = true
