@@ -2,7 +2,7 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/violi
 local Window = Library:CreateWindow({Title = "Parking Panic Script", Center = true, AutoShow = true})
 local GeneralTab = Window:AddTab("General")
 local ActionBox = GeneralTab:AddLeftTabbox("Main")
-local MainTab = ActionBox:AddTab("Actions")
+local MainTab = ActionBox:AddTab("Main")
 MainTab:AddButton("Unlock All Badges", function() for i = 1, 50 do game.ReplicatedStorage.CompleteLevel:FireServer(i) end Library:Notify("Unlocked All Badges") end)
 local CreditsBox = GeneralTab:AddRightTabbox("Credits") do
     local Main = CreditsBox:AddTab("Credits")
