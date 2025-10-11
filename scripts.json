@@ -1,0 +1,59 @@
+{
+  "scripts": [
+    {
+      "name": "Infinite Yield",
+      "desc": "Infinite Yield",
+      "url": "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"
+    },
+    {
+      "name": "Dex Explorer",
+      "desc": "Dex Explorer",
+      "url": "https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"
+    },
+    {
+      "name": "ModuleScript Editor",
+      "desc": "Script to Edit ModuleScripts",
+      "url": "https://raw.githubusercontent.com/cr7jrsuii/cr7jrsuii.github.io/refs/heads/main/modulescripteditor.lua"
+    },
+    {
+      "name": "The Plaza Money Editor",
+      "desc": "Money Editor for The Plaza",
+      "url": "https://raw.githubusercontent.com/cr7jrsuii/cr7jrsuii.github.io/refs/heads/main/theplazamoneyeditor.lua"
+    },
+    {
+      "name": "Universal Silent Aim",
+      "desc": "Universal Silent Aim",
+      "url": "https://raw.githubusercontent.com/cr7jrsuii/cr7jrsuii.github.io/refs/heads/main/universalslientaim.lua"
+    },
+    {
+      "name": "Parking Panic Script",
+      "desc": "Script for Parking Panic",
+      "url": "https://raw.githubusercontent.com/cr7jrsuii/cr7jrsuii.github.io/refs/heads/main/parkingpanic.lua"
+    },
+    {
+      "name": "Paintball Wars Script",
+      "desc": "Script for Paintball Wars",
+      "url": "https://raw.githubusercontent.com/cr7jrsuii/cr7jrsuii.github.io/refs/heads/main/paintballwars.lua"
+    },
+    {
+      "name": "Don't leave the circle Script",
+      "desc": "Script for Don't leave the circle",
+      "url": "https://raw.githubusercontent.com/cr7jrsuii/cr7jrsuii.github.io/refs/heads/main/dontleavethecirclescript.lua"
+    },
+    {
+      "name": "Port of Entry: Border Roleplay Script Script",
+      "desc": "Script for Port of Entry: Border Roleplay Script",
+      "url": "https://raw.githubusercontent.com/cr7jrsuii/cr7jrsuii.github.io/refs/heads/main/portofentryscript.lua"
+    },
+    {
+      "name": "Fading Blocks Script",
+      "desc": "Script for Fading Blocks",
+      "url": "https://raw.githubusercontent.com/cr7jrsuii/cr7jrsuii.github.io/refs/heads/main/fadingblocksscript.lua"
+    },
+    {
+      "name": "Plane Crash Physics Script",
+      "desc": "Script for Plane Crash Physics",
+      "url": "https://raw.githubusercontent.com/cr7jrsuii/cr7jrsuii.github.io/refs/heads/main/planecrashphysicsscript.lua"
+    }
+  ]
+}
