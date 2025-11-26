@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lego Save File Checksum Fixer</title>
+    <meta name="description" content="Regenerate Checksums for Traveller's tales save files">
+    <meta property="og:title" content="Lego Save File Checksum Fixer">
+    <meta property="og:description" content="Regenerate Checksums for Traveller's tales save files">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Lego Save File Checksum Fixer">
+    <meta name="twitter:description" content="Regenerate Checksums for Traveller's tales save files">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: auto;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        button:disabled {
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lego Save File Checksum Fixer</h1>
+    <input type="file" id="fileInput">
+    <button id="exportBtn" disabled>Export Fixed Checksum</button>
+    <div id="status" style="margin-top: 10px;"></div>
+    
+    <div>
+        <h2 style="font-size: 18px;">Supported Games</h2>
+        <ul style="list-style-position: inside; padding: 0;">
+            <li>Lego Batman 2: DC Super Heroes (<b>LB2</b>)</li>
+            <li>LEGO City Undercover (<b>LCU</b>)</li>
+            <li>Lego Harry Potter: Years 5-7 (<b>LHP2</b>)</li>
+            <li>Lego Pirates of the Caribbean: The Video Game (<b>LPotC</b>)</li>
+            <li>Lego The Lord of the Rings (<b>LLotR</b>)</li>
+            <li>The Lego Movie Videogame (<b>TLM1</b>)</li>
+        </ul>
+    </div>
+
+    <script>
+        const MAGIC_HEADER = 0x52474D48;
+        const HEADER_SIZE = 8232;
+        const GAME_HEADER_SIG = new Uint8Array([0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC8, 0x42, 0x7A, 0x97, 0x2C, 0x88]);
+
+        let fixedData = null;
+        let originalFilename = '';
+
+        function fnv1a(data) {
+            const FNV_PRIME = 16777619;
+            let hash = 0xFFFFFFFF;
+            
+            for (let i = 0; i < data.length; i++) {
+                hash = (Math.imul(hash, FNV_PRIME) ^ data[i]) >>> 0;
+            }
+            
+            return (~hash) >>> 0;
+        }
+
+        function getSections(data) {
+            const sections = [];
+            for (let i = 0; i <= data.length - GAME_HEADER_SIG.length; i++) {
+                let match = true;
+                for (let j = 0; j < GAME_HEADER_SIG.length; j++) {
+                    if (data[i + j] !== GAME_HEADER_SIG[j]) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) {
+                    sections.push(i);
+                }
+            }
+            return sections;
+        }
+
+        function getU32(data, offset) {
+            return ((data[offset]) | (data[offset + 1] << 8) | (data[offset + 2] << 16) | (data[offset + 3] << 24)) >>> 0;
+        }
+
+        function setU32(data, offset, value) {
+            data[offset] = value & 0xFF;
+            data[offset + 1] = (value >>> 8) & 0xFF;
+            data[offset + 2] = (value >>> 16) & 0xFF;
+            data[offset + 3] = (value >>> 24) & 0xFF;
+        }
+
+        function getWStr(data, offset) {
+            const wcharSize = 1024 * 2;
+            const stringData = data.slice(offset, offset + wcharSize);
+            
+            let nullPos = -1;
+            for (let i = 0; i < stringData.length - 1; i += 2) {
+                if (stringData[i] === 0 && stringData[i + 1] === 0) {
+                    nullPos = i;
+                    break;
+                }
+            }
+            
+            if (nullPos === -1) nullPos = stringData.length;
+            
+            try {
+                const decoder = new TextDecoder('utf-16le');
+                return decoder.decode(stringData.slice(0, nullPos));
+            } catch {
+                return '';
+            }
+        }
+
+        function process(data) {
+            const magic = getU32(data, 0);
+            const hasHMGR = magic === MAGIC_HEADER;
+            
+            let message = '';
+            
+            if (hasHMGR) {
+                message += 'Rich Save Game header detected<br>';
+                const gameNameOffset = 4 + 4 + 4 + 8 + 4 + 16;
+                const gameName = getWStr(data, gameNameOffset);
+                if (gameName && gameName.length > 0) {
+                    message += `Game Name: ${gameName}<br>`;
+                }
+            } else {
+                message += 'No Rich Save Game header detected<br>';
+            }
+            
+            let gameDataOffset = hasHMGR ? HEADER_SIZE : 0;
+            const gameData = data.slice(gameDataOffset);
+            const sections = getSections(gameData);
+
+            if (sections.length === 0) {
+                return { success: false, message: message + 'No save data found' };
+            }
+
+            const startPos = sections[0];
+            const endPos = sections.length > 1 ? sections[1] : gameData.length;
+            const oldChecksum = getU32(gameData, startPos + 12);
+            const sectionData = gameData.slice(startPos + 16, endPos);
+            const newChecksum = fnv1a(sectionData);
+
+            const fixedData = new Uint8Array(data);
+            setU32(fixedData, gameDataOffset + startPos + 12, newChecksum);
+
+            if (sections.length > 1) {
+                for (let i = 1; i < sections.length; i++) {
+                    setU32(fixedData, gameDataOffset + sections[i] + 12, newChecksum);
+                }
+            }
+
+            if (oldChecksum === newChecksum) {
+                message += `Checksum: 0x${oldChecksum.toString(16).toUpperCase().padStart(8, '0')}<br>Checksum valid`;
+                return { success: false, message: message };
+            } else {
+                message += `Old checksum: 0x${oldChecksum.toString(16).toUpperCase().padStart(8, '0')}<br>`;
+                message += `New checksum: 0x${newChecksum.toString(16).toUpperCase().padStart(8, '0')}<br>`;
+                message += 'Invalid checksum updated';
+            }
+
+            return { success: true, data: fixedData, message: message };
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            originalFilename = file.name;
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const data = new Uint8Array(event.target.result);
+                const result = process(data);
+
+                document.getElementById('status').innerHTML = result.message;
+
+                if (result.success) {
+                    fixedData = result.data;
+                    document.getElementById('exportBtn').disabled = false;
+                } else {
+                    fixedData = null;
+                    document.getElementById('exportBtn').disabled = true;
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            if (!fixedData) return;
+
+            const blob = new Blob([fixedData], { type: 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = originalFilename.replace(/(\.[^.]+)$/, '_fixed$1');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>
