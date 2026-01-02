@@ -19,9 +19,6 @@ bool enabled = false;
 bool toggled = false;
 float frozen_matrix[16] = { 0 };
 
-bool arrow_up_prev = false, arrow_down_prev = false;
-bool arrow_left_prev = false, arrow_right_prev = false;
-
 float cam_pos_x = 0.0f, cam_pos_y = 0.0f, cam_pos_z = 0.0f;
 float cam_yaw = 0.0f, cam_pitch = 0.0f;
 float move_speed = 0.001f, rotate_speed = 0.00005f;
@@ -49,20 +46,10 @@ float* __cdecl hooked_CameraFunction(float* a1, float* a2)
 
     if (enabled)
     {
-        bool arrow_up = GetAsyncKeyState(VK_UP) & 0x8000;
-        bool arrow_down = GetAsyncKeyState(VK_DOWN) & 0x8000;
-        bool arrow_right = GetAsyncKeyState(VK_RIGHT) & 0x8000;
-        bool arrow_left = GetAsyncKeyState(VK_LEFT) & 0x8000;
-
-        if (arrow_up && !arrow_up_prev) move_speed += 0.0001f;
-        if (arrow_down && !arrow_down_prev) move_speed = max(0.0001f, move_speed - 0.0001f);
-        if (arrow_right && !arrow_right_prev) rotate_speed += 0.00001f;
-        if (arrow_left && !arrow_left_prev) rotate_speed = max(0.00001f, rotate_speed - 0.00001f);
-
-        arrow_up_prev = arrow_up;
-        arrow_down_prev = arrow_down;
-        arrow_right_prev = arrow_right;
-        arrow_left_prev = arrow_left;
+        if (GetAsyncKeyState(VK_UP) & 0x8000) move_speed += 0.0001f;
+        if (GetAsyncKeyState(VK_DOWN) & 0x8000) move_speed = max(0.0001f, move_speed - 0.0001f);
+        if (GetAsyncKeyState(VK_RIGHT) & 0x8000) rotate_speed += 0.00001f;
+        if (GetAsyncKeyState(VK_LEFT) & 0x8000) rotate_speed = max(0.00001f, rotate_speed - 0.00001f);
 
         XINPUT_STATE state = {};
         if (XInputGetState(0, &state) == ERROR_SUCCESS)
