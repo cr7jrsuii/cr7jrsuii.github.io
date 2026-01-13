@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mods for My Videos</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+        }
+
+        h1 {
+            margin-bottom: 0px;
+        }
+
+        .table {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .table textarea {
+            flex: 1;
+            height: 15px;
+            resize: none;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        iframe {
+            display: block;
+        }
+
+        hr {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+        h2 {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mods for My Videos</h1>
+    <div class="table">
+        <label>DLL Loader</label>
+        <button onclick="OpenLink('mods/dllloader.html')">About</button>
+        <button onclick="Download('mods/dinput8.dll')">Download</button>
+        <button onclick="OpenLink('mods/dinput8.cpp')">Source Code</button>
+        <button onclick="OpenLink('https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911')">VirusTotal</button>
+    </div>
+    <div class="table">
+        <label>Lego City Undercover Freecam</label>
+        <button onclick="OpenLink('mods/cityfreecam.html')">About</button>
+        <button onclick="OpenLink('mods/cityfreecam.png')">Preview</button>
+        <button onclick="Download('mods/cityfreecam.dll')">Download</button>
+        <button onclick="OpenLink('mods/cityfreecam.cpp')">Source Code</button>
+        <button onclick="OpenLink('https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa')">VirusTotal</button>
+    </div>
+    <hr>
+    <h2>Subscribe on YouTube</h2>
+    <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" width="160" height="48" frameborder="0" title="Subscribe to Meatboxing on YouTube"></iframe>
+</body>
+<script>
+function Download(url) {
+    fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = url.split('/').pop();
+            a.click();
+        })
+        .catch(err => alert('Download failed'));
+}
+function OpenLink(url) {
+    window.open(url, '_blank');
+}
+</script>
+</html>
