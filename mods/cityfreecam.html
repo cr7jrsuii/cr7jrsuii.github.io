@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Lego City Undercover Freecam</title>
+    <title>Lego City Undercover Freecam</title>
     <style>
         body {
             font-family: Arial;
@@ -58,16 +58,20 @@
     <p>Left trigger to move down</p>
     <div class="table">
         <label>Lego City Undercover Freecam</label>
-        <button onclick="OpenLink('cityfreecam.png')">Preview</button>
-        <button onclick="Download('cityfreecam.dll')">Download</button>
-        <button onclick="OpenLink('cityfreecam.cpp')">Source Code</button>
-        <button onclick="OpenLink('https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa')">VirusTotal</button>
+        <button onmouseup="if(event.button === 1) OpenLink('cityfreecam.png')" onclick="OpenLink('cityfreecam.png')">Preview</button>
+        <button onmouseup="Download('cityfreecam.dll', event)" onclick="Download('cityfreecam.dll')">Download</button>
+        <button onmouseup="if(event.button === 1) OpenLink('cityfreecam.cpp')" onclick="OpenLink('cityfreecam.cpp')">Source Code</button>
+        <button onmouseup="if(event.button === 1) OpenLink('https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa')" onclick="OpenLink('https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa')">VirusTotal</button>
     </div>
     <h2>Subscribe on YouTube</h2>
     <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" width="160" height="48" frameborder="0" title="Subscribe to Meatboxing on YouTube"></iframe>
 </body>
 <script>
-function Download(url) {
+function Download(url, event) {
+    if (event && event.button === 1) {
+        window.open(url, '_blank');
+        return;
+    }
     fetch(url)
         .then(response => response.blob())
         .then(blob => {
@@ -83,3 +87,4 @@ function OpenLink(url) {
 }
 </script>
 </html>
+
