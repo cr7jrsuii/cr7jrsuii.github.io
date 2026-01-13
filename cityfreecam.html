@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Lego City Undercover Freecam</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+        }
+        h1 {
+            margin-bottom: 0px;
+        }
+        .table {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .table textarea {
+            flex: 1;
+            height: 15px;
+            resize: none;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        iframe {
+            display: block;
+        }
+        hr {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        h2 {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lego City Undercover Freecam</h1>
+    <p>DLL mod that lets you use a freecam in Lego City Undercover</p>
+    <b>Xbox Controller required(workarounds needed for other controllers)</b>
+    <h2>How to use</h2>
+    <p>You will need a way of loading a DLL file, DLL files are executables eg .exe but they cannot be ran just by double clicking.</p>
+    <p>Option 1, DLL loader. For this check <button onclick="OpenLink('dllloader.html')">DLL Loader</button>, You will need to drag the freecam DLL into the injected folder.</p>
+    <p>Option 2, Cheat Engine. For this you will need Cheat Engine, Open the LCU process and click on Memory View, once you see the memory viewer window go to Tools > Inject DLL, here select the Freecam DLL and click Yes.</p>
+    <p>Option 3, System Informer(Formerly known as Process Hacker), For this you will need System Informer, Right click on LCU process and click on Properties, Then go on Modules and click on Options, and press Load Module, then select the Freecam DLL.</p>
+    <p>Option 4, Dedicated DLL Injector, You can use any DLL Injector and it should work.</p>
+    <h2>Controls</h2>
+    <p>F1 to toggle</p>
+    <p>Left joystick to move around</p>
+    <p>Right joystick to look around</p>
+    <p>Right trigger to move up</p>
+    <p>Left trigger to move down</p>
+    <div class="table">
+        <label>Lego City Undercover Freecam</label>
+        <button onclick="OpenLink('cityfreecam.png')">Preview</button>
+        <button onclick="Download('cityfreecam.dll')">Download</button>
+        <button onclick="OpenLink('cityfreecam.cpp')">Source Code</button>
+        <button onclick="OpenLink('https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa')">VirusTotal</button>
+    </div>
+    <h2>Subscribe on YouTube</h2>
+    <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" width="160" height="48" frameborder="0" title="Subscribe to Meatboxing on YouTube"></iframe>
+</body>
+<script>
+function Download(url) {
+    fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = url.split('/').pop();
+            a.click();
+        })
+        .catch(err => alert('Download failed'));
+}
+function OpenLink(url) {
+    window.open(url, '_blank');
+}
+</script>
+</html>

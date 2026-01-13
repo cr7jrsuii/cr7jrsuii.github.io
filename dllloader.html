@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Lego City Undercover Freecam</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+        }
+        h1 {
+            margin-bottom: 0px;
+        }
+        .table {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .table textarea {
+            flex: 1;
+            height: 15px;
+            resize: none;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        iframe {
+            display: block;
+        }
+        hr {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        h2 {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>DLL Loader(dinput8.dll Proxy)</h1>
+    <p>DLL Loader which will load all DLLs inside a folder</p>
+    <h2>How to use</h2>
+    <p>Firstly download the DLL, it should be named as dinput8.dll, then drag and drop it into the same folder as your game, then create a folder called "injected"</p>
+    <p>All DLLs inside the injected folder should now load once you start the game, <b style="color: red;">only add DLLs you trust, they are executable files. </b></p>
+    <div class="table">
+        <label>DLL Loader</label>
+        <button onclick="Download('dinput8.dll')">Download</button>
+        <button onclick="OpenLink('dinput8.cpp')">Source Code</button>
+        <button onclick="OpenLink('https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911')">VirusTotal</button>
+    </div>
+    <h2>Subscribe on YouTube</h2>
+    <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" width="160" height="48" frameborder="0" title="Subscribe to Meatboxing on YouTube"></iframe>
+</body>
+<script>
+function Download(url) {
+    fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = url.split('/').pop();
+            a.click();
+        })
+        .catch(err => alert('Download failed'));
+}
+function OpenLink(url) {
+    window.open(url, '_blank');
+}
+</script>
+</html>
