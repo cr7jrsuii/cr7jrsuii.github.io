@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Lego City Undercover Freecam</title>
+    <title>DLL Loader</title>
     <style>
         body {
             font-family: Arial;
@@ -48,15 +48,19 @@
     <p>All DLLs inside the injected folder should now load once you start the game, <b style="color: red;">only add DLLs you trust, they are executable files. </b></p>
     <div class="table">
         <label>DLL Loader</label>
-        <button onclick="Download('dinput8.dll')">Download</button>
-        <button onclick="OpenLink('dinput8.cpp')">Source Code</button>
-        <button onclick="OpenLink('https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911')">VirusTotal</button>
+        <button onmouseup="Download('dinput8.dll', event)" onclick="Download('dinput8.dll')">Download</button>
+        <button onmouseup="if(event.button === 1) OpenLink('dinput8.cpp')" onclick="OpenLink('dinput8.cpp')">Source Code</button>
+        <button onmouseup="if(event.button === 1) OpenLink('https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911')" onclick="OpenLink('https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911')">VirusTotal</button>
     </div>
     <h2>Subscribe on YouTube</h2>
     <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" width="160" height="48" frameborder="0" title="Subscribe to Meatboxing on YouTube"></iframe>
 </body>
 <script>
-function Download(url) {
+function Download(url, event) {
+    if (event && event.button === 1) {
+        window.open(url, '_blank');
+        return;
+    }
     fetch(url)
         .then(response => response.blob())
         .then(blob => {
