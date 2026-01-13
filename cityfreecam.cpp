@@ -93,11 +93,14 @@ DWORD WINAPI MainThread(LPVOID lpParam) {
     InstallHook();
 
     bool f1 = false;
+    HMODULE hModule = GetModuleHandleA(NULL);
+    BYTE* hudFlag = (BYTE*)hModule + 0x18340B1;
 
     while (true) {
         if (GetAsyncKeyState(VK_F1) & 0x8000) {
             if (!f1) {
                 frozen = !frozen;
+                *hudFlag = frozen ? 0 : 1;
                 f1 = true;
             }
         }
