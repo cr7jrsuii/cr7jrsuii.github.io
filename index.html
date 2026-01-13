@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meatboxing</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+        }
+        h1 {
+            margin-bottom: 0px;
+        }
+        .table {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .table textarea {
+            flex: 1;
+            height: 15px;
+            resize: none;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        iframe {
+            display: block;
+        }
+        hr {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        h2 {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Meatboxing</h1>
+    <h2>About me</h2>
+    <label>My</label> <button onmouseup="if(event.button === 1) OpenLink('https://www.youtube.com/@meatboxing')" onclick="OpenLink('https://www.youtube.com/@meatboxing')">YouTube</button><br>
+    <label>My</label> <button onmouseup="if(event.button === 1) OpenLink('https://www.x.com/@meatboxing')" onclick="OpenLink('https://www.x.com/@meatboxing')">Twitter</button>
+    <h2>Pages</h2>
+    <button onmouseup="if(event.button === 1) OpenLink('mods.html')" onclick="OpenLink('mods.html')">Mods for My Videos</button><br>
+    <button onmouseup="if(event.button === 1) OpenLink('scripts.html')" onclick="OpenLink('scripts.html')">Scripts for My Videos</button><br>
+    <button onmouseup="if(event.button === 1) OpenLink('tables.html')" onclick="OpenLink('tables.html')">Tables for My Videos</button>
+    <hr>
+    <h2>Subscribe on YouTube</h2>
+    <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" width="160" height="48" frameborder="0" title="Subscribe to Meatboxing on YouTube"></iframe>
+</body>
+<script>
+function Download(url, event) {
+    if (event && event.button === 1) {
+        window.open(url, '_blank');
+        return;
+    }
+    fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = url.split('/').pop();
+            a.click();
+        })
+        .catch(err => alert('Download failed'));
+}
+function OpenLink(url) {
+    window.open(url, '_blank');
+}
+</script>
+</html>
