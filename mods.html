@@ -9,17 +9,14 @@
             font-family: Arial;
             margin: 20px;
         }
-
         h1 {
             margin-bottom: 0px;
         }
-
         .table {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-
         .table textarea {
             flex: 1;
             height: 15px;
@@ -27,16 +24,13 @@
             font-family: monospace;
             font-size: 14px;
         }
-
         iframe {
             display: block;
         }
-
         hr {
             margin-top: 0px;
             margin-bottom: 0px;
         }
-
         h2 {
             margin-top: 0px;
             margin-bottom: 0px;
@@ -47,25 +41,29 @@
     <h1>Mods for My Videos</h1>
     <div class="table">
         <label>DLL Loader</label>
-        <button onclick="OpenLink('mods/dllloader.html')">About</button>
-        <button onclick="Download('mods/dinput8.dll')">Download</button>
-        <button onclick="OpenLink('mods/dinput8.cpp')">Source Code</button>
-        <button onclick="OpenLink('https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911')">VirusTotal</button>
+        <button onmouseup="if(event.button === 1) OpenLink('mods/dllloader.html')" onclick="OpenLink('mods/dllloader.html')">About</button>
+        <button onmouseup="Download('mods/dinput8.dll', event)" onclick="Download('mods/dinput8.dll')">Download</button>
+        <button onmouseup="if(event.button === 1) OpenLink('mods/dinput8.cpp')" onclick="OpenLink('mods/dinput8.cpp')">Source Code</button>
+        <button onmouseup="if(event.button === 1) OpenLink('https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911')" onclick="OpenLink('https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911')">VirusTotal</button>
     </div>
     <div class="table">
         <label>Lego City Undercover Freecam</label>
-        <button onclick="OpenLink('mods/cityfreecam.html')">About</button>
-        <button onclick="OpenLink('mods/cityfreecam.png')">Preview</button>
-        <button onclick="Download('mods/cityfreecam.dll')">Download</button>
-        <button onclick="OpenLink('mods/cityfreecam.cpp')">Source Code</button>
-        <button onclick="OpenLink('https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa')">VirusTotal</button>
+        <button onmouseup="if(event.button === 1) OpenLink('mods/cityfreecam.html')" onclick="OpenLink('mods/cityfreecam.html')">About</button>
+        <button onmouseup="if(event.button === 1) OpenLink('mods/cityfreecam.png')" onclick="OpenLink('mods/cityfreecam.png')">Preview</button>
+        <button onmouseup="Download('mods/cityfreecam.dll', event)" onclick="Download('mods/cityfreecam.dll')">Download</button>
+        <button onmouseup="if(event.button === 1) OpenLink('mods/cityfreecam.cpp')" onclick="OpenLink('mods/cityfreecam.cpp')">Source Code</button>
+        <button onmouseup="if(event.button === 1) OpenLink('https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa')" onclick="OpenLink('https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa')">VirusTotal</button>
     </div>
     <hr>
     <h2>Subscribe on YouTube</h2>
     <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" width="160" height="48" frameborder="0" title="Subscribe to Meatboxing on YouTube"></iframe>
 </body>
 <script>
-function Download(url) {
+function Download(url, event) {
+    if (event && event.button === 1) {
+        window.open(url, '_blank');
+        return;
+    }
     fetch(url)
         .then(response => response.blob())
         .then(blob => {
