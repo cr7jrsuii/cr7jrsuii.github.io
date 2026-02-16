@@ -56,7 +56,7 @@
     <b>Xbox Controller required(workarounds needed for other controllers)</b>
     <h2>How to use</h2>
     <p>You will need a way of loading a DLL file, DLL files are executables eg .exe but they cannot be ran just by double clicking.</p>
-    <p>Option 1, DLL loader. For this check out <button onmouseup="if(event.button === 1) OpenLink('dllloader.html')" onclick="OpenLink('dllloader.html')">DLL Loader</button>, You will need to drag the freecam DLL into the injected folder.</p>
+    <p>Option 1, DLL loader. For this check out <a href="dllloader.html" target="_blank"><button>DLL Loader</button></a>, You will need to drag the freecam DLL into the injected folder.</p>
     <p>Option 2, Cheat Engine. For this you will need Cheat Engine, Open the LCU process and click on Memory View, once you see the memory viewer window go to Tools > Inject DLL, here select the Freecam DLL and click Yes.</p>
     <p>Option 3, System Informer(Formerly known as Process Hacker), For this you will need System Informer, Right click on LCU process and click on Properties, Then go on Modules and click on Options, and press Load Module, then select the Freecam DLL.</p>
     <p>Option 4, Dedicated DLL Injector, You can use any DLL Injector and it should work.</p>
@@ -72,10 +72,10 @@
     <p>Left Arrow key to increase sensitivity</p>
     <div class="table">
         <label>Lego City Undercover Freecam</label>
-        <button onmouseup="if(event.button === 1) OpenLink('cityfreecam.png')" onclick="OpenLink('cityfreecam.png')">Preview</button>
+        <a href="cityfreecam.png" target="_blank"><button>Preview</button></a>
         <button onmouseup="if(event.button === 1) { event.preventDefault(); window.open('cityfreecam.dll', '_blank'); }" onclick="Download('cityfreecam.dll')">Download</button>
-        <button onmouseup="if(event.button === 1) OpenLink('cityfreecam.cpp')" onclick="OpenLink('cityfreecam.cpp')">Source Code</button>
-        <button onmouseup="if(event.button === 1) OpenLink('https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa')" onclick="OpenLink('https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa')">VirusTotal</button>
+        <a href="cityfreecam.cpp" target="_blank"><button>Source Code</button></a>
+        <a href="https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa" target="_blank"><button>VirusTotal</button></a>
     </div>
     <h2>Subscribe on YouTube</h2>
     <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" width="160" height="48" frameborder="0" title="Subscribe to Meatboxing on YouTube"></iframe>
@@ -92,9 +92,5 @@ function Download(url) {
         })
         .catch(err => alert('Download failed'));
 }
-function OpenLink(url) {
-    window.open(url, '_blank');
-}
 </script>
 </html>
-
