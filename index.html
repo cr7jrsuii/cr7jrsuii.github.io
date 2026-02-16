@@ -45,20 +45,18 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-EGBYVCC0M2');
 </script>
-
 </head>
 <body>
     <h1>Meatboxing</h1>
     <h2>About me</h2>
-    <label>My</label> <button onmouseup="if(event.button === 1) OpenLink('https://www.youtube.com/@meatboxing')" onclick="OpenLink('https://www.youtube.com/@meatboxing')">YouTube</button><br>
-    <label>My</label> <button onmouseup="if(event.button === 1) OpenLink('https://www.x.com/@meatboxing')" onclick="OpenLink('https://www.x.com/@meatboxing')">Twitter</button>
+    <label>My</label> <a href="https://www.youtube.com/@meatboxing" target="_blank"><button>YouTube</button></a><br>
+    <label>My</label> <a href="https://www.x.com/@meatboxing" target="_blank"><button>Twitter</button></a>
     <h2>Pages</h2>
-    <button onmouseup="if(event.button === 1) OpenLink('mods.html')" onclick="OpenLink('mods.html')">Mods for My Videos</button><br>
-    <button onmouseup="if(event.button === 1) OpenLink('scripts.html')" onclick="OpenLink('scripts.html')">Scripts for My Videos</button><br>
-    <button onmouseup="if(event.button === 1) OpenLink('tables.html')" onclick="OpenLink('tables.html')">Tables for My Videos</button>
+    <a href="mods.html" target="_blank"><button>Mods for My Videos</button></a><br>
+    <a href="scripts.html" target="_blank"><button>Scripts for My Videos</button></a><br>
+    <a href="tables.html" target="_blank"><button>Tables for My Videos</button></a>
     <hr>
     <h2>Subscribe on YouTube</h2>
     <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" width="160" height="48" frameborder="0" title="Subscribe to Meatboxing on YouTube"></iframe>
@@ -78,9 +76,6 @@ function Download(url, event) {
             a.click();
         })
         .catch(err => alert('Download failed'));
-}
-function OpenLink(url) {
-    window.open(url, '_blank');
 }
 </script>
 </html>
