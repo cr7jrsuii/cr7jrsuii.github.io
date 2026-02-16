@@ -16,12 +16,15 @@
 		<loc>https://cr7jrsuii.github.io/mods/dllloader</loc>
 	</url>
 	<url>
-		<loc>https://cr7jrsuii.github.io/mods/index</loc>
+		<loc>https://cr7jrsuii.github.io/mods</loc>
 	</url>
 	<url>
 		<loc>https://cr7jrsuii.github.io/scripts</loc>
 	</url>
 	<url>
 		<loc>https://cr7jrsuii.github.io/tables</loc>
+	</url>
+	<url>
+		<loc>https://cr7jrsuii.github.io/</loc>
 	</url>
 </urlset>
