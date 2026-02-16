@@ -42,27 +42,25 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-EGBYVCC0M2');
 </script>
-
 </head>
 <body>
     <h1>Mods for My Videos</h1>
     <div class="table">
         <label>DLL Loader</label>
-        <button onmouseup="if(event.button === 1) OpenLink('mods/dllloader.html')" onclick="OpenLink('mods/dllloader.html')">About</button>
+        <a href="mods/dllloader.html" target="_blank"><button>About</button></a>
         <button onmouseup="if(event.button === 1) { event.preventDefault(); window.open('mods/dinput8.dll', '_blank'); }" onclick="Download('mods/dinput8.dll')">Download</button>
-        <button onmouseup="if(event.button === 1) OpenLink('mods/dinput8.cpp')" onclick="OpenLink('mods/dinput8.cpp')">Source Code</button>
-        <button onmouseup="if(event.button === 1) OpenLink('https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911')" onclick="OpenLink('https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911')">VirusTotal</button>
+        <a href="mods/dinput8.cpp" target="_blank"><button>Source Code</button></a>
+        <a href="https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911" target="_blank"><button>VirusTotal</button></a>
     </div>
     <div class="table">
         <label>Lego City Undercover Freecam</label>
-        <button onmouseup="if(event.button === 1) OpenLink('mods/cityfreecam.html')" onclick="OpenLink('mods/cityfreecam.html')">About</button>
-        <button onmouseup="if(event.button === 1) OpenLink('mods/cityfreecam.png')" onclick="OpenLink('mods/cityfreecam.png')">Preview</button>
+        <a href="mods/cityfreecam.html" target="_blank"><button>About</button></a>
+        <a href="mods/cityfreecam.png" target="_blank"><button>Preview</button></a>
         <button onmouseup="if(event.button === 1) { event.preventDefault(); window.open('mods/cityfreecam.dll', '_blank'); }" onclick="Download('mods/cityfreecam.dll')">Download</button>
-        <button onmouseup="if(event.button === 1) OpenLink('mods/cityfreecam.cpp')" onclick="OpenLink('mods/cityfreecam.cpp')">Source Code</button>
-        <button onmouseup="if(event.button === 1) OpenLink('https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa')" onclick="OpenLink('https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa')">VirusTotal</button>
+        <a href="mods/cityfreecam.cpp" target="_blank"><button>Source Code</button></a>
+        <a href="https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa" target="_blank"><button>VirusTotal</button></a>
     </div>
     <hr>
     <h2>Subscribe on YouTube</h2>
@@ -80,9 +78,5 @@ function Download(url) {
         })
         .catch(err => alert('Download failed'));
 }
-function OpenLink(url) {
-    window.open(url, '_blank');
-}
 </script>
 </html>
-
