@@ -1,3 +1,6 @@
+if getgenv().Loaded then return end
+getgenv().Loaded = true
+
 local function formatRawHttp(method, url, headers, body)
     local host, path = "unknown", "/"
     
