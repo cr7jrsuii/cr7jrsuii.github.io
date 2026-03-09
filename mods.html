@@ -3,81 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mods for My Videos</title>
+    <title>Mods by Meatboxing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap"
+        rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial;
-            margin: 20px;
+            font-family: 'Roboto Condensed', Arial, sans-serif;
+            background: #111 url('bg.png') repeat fixed;
+            background-size: 20vh;
+            color: #fff;
         }
-        h1 {
-            margin-bottom: 0px;
-        }
-        .table {
+
+        .topbar {
+            position: relative;
+            height: 45px;
+            background: #1e1e1e url('header.png') top left repeat-x;
             display: flex;
             align-items: center;
-            gap: 5px;
+            padding: 0 1em;
         }
-        .table textarea {
-            flex: 1;
-            height: 15px;
-            resize: none;
-            font-family: monospace;
+
+        .topbar .title {
+            font-weight: 400;
             font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fff;
+            flex: 1;
         }
-        iframe {
+
+        .page {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2em 1.5em;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #555;
+            border-bottom: 1px solid #222;
+            padding-bottom: 0.4em;
+            margin-bottom: 0.8em;
+        }
+
+        @keyframes rborder {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 1000px 0;
+            }
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg,
+                    #7aafc4, #3dd4e0, #7de8d8, #b8e89e, #ffd86a,
+                    #ffbf96, #f0a090, #ffb0a8, #ffbedd, #d4c8f8,
+                    #96c8ff, #7aafc4);
+            background-size: 500px 100%;
+            animation: rborder 30s linear infinite;
+        }
+
+        a {
+            text-decoration: none;
+            background: linear-gradient(90deg,
+                    #7aafc4, #3dd4e0, #7de8d8, #b8e89e, #ffd86a,
+                    #ffbf96, #f0a090, #ffb0a8, #ffbedd, #d4c8f8,
+                    #96c8ff, #7aafc4);
+            background-size: 500px 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rborder 30s linear infinite;
+        }
+
+        a:hover {
+            opacity: 0.7;
+        }
+
+        a:active {
+            opacity: 0.5;
+        }
+
+        .links {
+            display: flex;
+            gap: 0.5em;
+            flex-wrap: wrap;
+        }
+
+        .links a {
+            font-size: 13px;
+            color: #aaa;
+            -webkit-text-fill-color: #aaa;
+            -webkit-background-clip: border-box;
+            background-clip: border-box;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: calc(0.4em - 1px) calc(0.9em - 1px);
+            position: relative;
+            border: 1.5px solid transparent;
+            background:
+                linear-gradient(#111, #111111D9) padding-box,
+                linear-gradient(90deg,
+                    #577a8e, #2aa3ae, #5fbaa8, #90b67d, #ebc151,
+                    #e49f80, #ca836f, #db8c85, #dd9eb9, #b5a8d4,
+                    #74a0cd, #577a8e) border-box;
+            background-size: auto, 500px 100%;
+            animation: rborder 30s linear infinite;
+            opacity: 1;
+        }
+
+        .links a:hover {
+            color: #fff;
+            -webkit-text-fill-color: #fff;
+            opacity: 1;
+        }
+
+        .links a:active {
+            opacity: 1;
+        }
+
+        .mod-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+        }
+
+        .mod-card {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 1.2em;
+            align-items: start;
+        }
+
+        .mod-card img {
+            width: 100%;
             display: block;
         }
-        hr {
-            margin-top: 0px;
-            margin-bottom: 0px;
+
+        .mod-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6em;
         }
-        h2 {
-            margin-top: 0px;
-            margin-bottom: 0px;
+
+        .mod-title {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #fff;
+        }
+
+        .mod-game {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #444;
+        }
+
+        .mod-desc {
+            font-size: 13px;
+            color: #777;
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        .footer {
+            font-size: 12px;
+            color: #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     </style>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-EGBYVCC0M2"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-EGBYVCC0M2');
-</script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EGBYVCC0M2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-EGBYVCC0M2');
+    </script>
+    <meta name="description" content="List of Mods made by Meatboxing">
+    <meta name="robots" content="index,follow">
+    <meta name="author" content="Meatboxing">
+    <meta property="og:description" content="List of Mods made by Meatboxing"/>
+    <meta name="twitter:description" content="List of Mods made by Meatboxing">
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="Mods by Meatboxing"/>
+    <meta property="og:url" content="https://cr7jrsuii.github.io/mods"/>
 </head>
 <body>
-    <h1>Mods for My Videos</h1>
-    <div class="table">
-        <label>DLL Loader</label>
-        <a href="mods/dllloader" target="_blank">About</a>
-        <button onmouseup="if(event.button === 1) { event.preventDefault(); window.open('mods/dinput8.dll', '_blank'); }" onclick="Download('mods/dinput8.dll')">Download</button>
-        <a href="mods/dinput8.cpp" target="_blank">Source Code</a>
-        <a href="https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911" target="_blank">VirusTotal</a>
+    <div class="topbar">
+        <span class="title"><b><a href="/">Meatboxing</a></b> Mods</span>
     </div>
-    <div class="table">
-        <label>Lego City Undercover Freecam</label>
-        <a href="mods/cityfreecam" target="_blank">About</a>
-        <a href="mods/cityfreecam.png" target="_blank">Preview</a>
-        <button onmouseup="if(event.button === 1) { event.preventDefault(); window.open('mods/cityfreecam.dll', '_blank'); }" onclick="Download('mods/cityfreecam.dll')">Download</button>
-        <a href="mods/cityfreecam.cpp" target="_blank">Source Code</a>
-        <a href="https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa" target="_blank">VirusTotal</a>
+    <div class="page">
+        <div>
+            <div class="label">Mods</div>
+            <div class="mod-list">
+                <div class="mod-card">
+                    <img src="mods/cityfreecam.jpg" alt="LEGO City Undercover Freecam">
+                    <div class="mod-info">
+                        <span class="mod-game">LEGO City Undercover</span>
+                        <span class="mod-title">LEGO City Undercover Freecam</span>
+                        <p class="mod-desc">DLL mod that lets you use a freecam in LEGO City Undercover</p>
+                        <div class="links">
+                            <a href="mods/cityfreecam">About</a>
+                            <a href="mods/cityfreecam.png">Preview</a>
+                            <a href="mods/cityfreecam.dll">Download</a>
+                            <a href="mods/cityfreecam.cpp">Source Code</a>
+                            <a href="https://www.virustotal.com/gui/file/e4a3f73e29903419955c703aef72fbd2a914354892ab4a7c2f3c95c3bc90dcfa">VirusTotal</a>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="mod-card">
+                    <img src="opengraph-default.png" alt="Default">
+                    <div class="mod-info">
+                        <span class="mod-game">Universal</span>
+                        <span class="mod-title">DLL Loader</span>
+                        <p class="mod-desc">DLL Loader which will load all DLLs inside a folder</p>
+                        <div class="links">
+                            <a href="mods/dllloader">About</a>
+                            <a href="mods/dinput8.dll">Download</a>
+                            <a href="mods/dinput8.cpp">Source Code</a>
+                            <a href="https://www.virustotal.com/gui/file/8d93e3f82da3d78c8068bb1b0a3eda9b774e0a2c4e16dd91f2422ce9ea9a0911">VirusTotal</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="footer">
+            <span>cr7jrsuii.github.io/mods</span>
+            <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=default"
+                width="114" height="24" frameborder="0" title="Subscribe to Meatboxing on YouTube"></iframe>
+        </div>
     </div>
-    <hr>
-    <h2>Subscribe on YouTube</h2>
-    <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=full" width="160" height="48" frameborder="0" title="Subscribe to Meatboxing on YouTube"></iframe>
 </body>
-<script>
-function Download(url) {
-    fetch(url)
-        .then(response => response.blob())
-        .then(blob => {
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = url.split('/').pop();
-            a.click();
-        })
-        .catch(err => alert('Download failed'));
-}
-</script>
 </html>
-
