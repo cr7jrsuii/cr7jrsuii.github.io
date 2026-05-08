@@ -1,2 +1,4 @@
 User-agent: *
 Disallow:
+
+Sitemap: https://cr7jrsuii.github.io/sitemap.xml
