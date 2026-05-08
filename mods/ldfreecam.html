@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEGO Dimensions Freecam</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EGBYVCC0M2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EGBYVCC0M2');
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto Condensed', Arial, sans-serif;
+      background: #111 url('../bg.png') repeat fixed;
+      background-size: 20vh;
+      color: #fff;
+    }
+
+    .topbar {
+      position: relative;
+      height: 45px;
+      background: #1e1e1e url('../header.png') top left repeat-x;
+      display: flex;
+      align-items: center;
+      padding: 0 1em;
+    }
+
+    .topbar .title {
+      font-weight: 400;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #fff;
+      flex: 1;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2em 1.5em;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .notice {
+      background: #1a1500;
+      border: 1px solid #3a2e00;
+      border-left: 3px solid #FDC00F;
+      padding: 0.8em 1em;
+      font-size: 13px;
+      color: #ccc;
+      font-weight: 300;
+    }
+
+    .notice b {
+      color: #FDC00F;
+    }
+
+    .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #555;
+      border-bottom: 1px solid #222;
+      padding-bottom: 0.4em;
+      margin-bottom: 0.8em;
+    }
+
+    @keyframes rborder {
+      from {
+        background-position: 0 0;
+      }
+
+      to {
+        background-position: 1000px 0;
+      }
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg,
+          #7aafc4, #3dd4e0, #7de8d8, #b8e89e, #ffd86a,
+          #ffbf96, #f0a090, #ffb0a8, #ffbedd, #d4c8f8,
+          #96c8ff, #7aafc4);
+      background-size: 500px 100%;
+      animation: rborder 30s linear infinite;
+    }
+
+    a {
+      text-decoration: none;
+      background: linear-gradient(90deg,
+          #7aafc4, #3dd4e0, #7de8d8, #b8e89e, #ffd86a,
+          #ffbf96, #f0a090, #ffb0a8, #ffbedd, #d4c8f8,
+          #96c8ff, #7aafc4);
+      background-size: 500px 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: rborder 30s linear infinite;
+    }
+
+    a:hover {
+      opacity: 0.7;
+    }
+
+    a:active {
+      opacity: 0.5;
+    }
+
+    .links {
+      display: flex;
+      gap: 0.5em;
+      flex-wrap: wrap;
+    }
+
+    .links a {
+      font-size: 13px;
+      color: #aaa;
+      -webkit-text-fill-color: #aaa;
+      -webkit-background-clip: border-box;
+      background-clip: border-box;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: calc(0.4em - 1px) calc(0.9em - 1px);
+      position: relative;
+      border: 1.5px solid transparent;
+      background:
+        linear-gradient(#111, #111111D9) padding-box,
+        linear-gradient(90deg,
+          #577a8e,
+          #2aa3ae,
+          #5fbaa8,
+          #90b67d,
+          #ebc151,
+          #e49f80,
+          #ca836f,
+          #db8c85,
+          #dd9eb9,
+          #b5a8d4,
+          #74a0cd,
+          #577a8e) border-box;
+      background-size: auto, 500px 100%;
+      animation: rborder 30s linear infinite;
+      opacity: 1;
+    }
+
+    .links a:hover {
+      color: #fff;
+      -webkit-text-fill-color: #fff;
+      opacity: 1;
+    }
+
+    .links a:active {
+      opacity: 1;
+    }
+
+    .footer {
+      padding-top: 5px;
+      font-size: 12px;
+      color: #444;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .desc-content {
+      font-size: 13px;
+      font-weight: 300;
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+    .desc-content h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5em;
+    }
+
+    .desc-content h2 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 0.5em;
+      margin-bottom: 0.2em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .desc-content p {
+      margin-bottom: 0.1em;
+    }
+
+    .desc-content b {
+      color: #FDC00F;
+    }
+  </style>
+    <meta name="description" content="Freecam for LEGO Dimensions">
+    <meta name="robots" content="index,follow">
+    <meta name="author" content="Meatboxing">
+    <meta property="og:description" content="Freecam for LEGO Dimensions"/>
+    <meta name="twitter:description" content="Freecam for LEGO Dimensions">
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="LEGO Dimensions Freecam by Meatboxing"/>
+    <meta property="og:url" content="https://cr7jrsuii.github.io/mods/ldfreecam"/>
+    <meta property="og:image" content="https://cr7jrsuii.github.io/mods/ldfreecam.jpg"/>
+    <meta name="twitter:image" content="https://cr7jrsuii.github.io/mods/ldfreecam.jpg">
+    <meta name="color-scheme" content="dark">
+    <meta name="twitter:title" content="LEGO Dimensions Freecam by Meatboxing">
+    <link rel="canonical" href="https://cr7jrsuii.github.io/mods/ldfreecam">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:site_name" content="Meatboxing">
+</head>
+
+<body>
+  <div class="topbar">
+    <span class="title"><b><a href="/">Meatboxing</a></b> LEGO Dimensions Freecam</span>
+  </div>
+  <main class="page">
+    <h1>LEGO Dimensions Freecam</h1>
+    <img src="ldfreecam.jpg" style="width:100%;display:block;">
+    <div>
+      <div class="label">Description</div>
+      <div class="desc-content">
+        <h1>LEGO Dimensions Freecam</h1>
+        <p>Freecam for LEGO Dimensions</p>
+        <h2>About</h2>
+        <p>This freecam is for LEGO Dimensions, it works in all areas such as the main menu, cutscenes, and ingame.</p>
+        <p>It has not been tested on a real PS4, it works flawlessly on ShadPS4</p>
+        <h2>How to use</h2>
+        <p>You will need LEGO Dimensions installed on ShadPS4, once you have downloaded the freecam drag the <code>prx</code> file into the <code>sce_module</code> folder, note that it must be placed in your update folder if you have the game updated e.g. <code>CUSA01176-patch</code>.</p>
+        <h2>Controls</h2>
+        <p>L3 + R3 to toggle</p>
+        <p>Left joystick to move around</p>
+        <p>Right joystick to look around</p>
+        <p>R2 to move up</p>
+        <p>L2 to move down</p>
+        <p>D-pad Up to increase speed</p>
+        <p>D-pad Down to decrease speed</p>
+        <p>D-pad Right to increase sensitivity</p>
+        <p>D-pad Left to decrease sensitivity</p>
+      </div>
+    </div>
+    <div>
+      <div class="label">Download</div>
+      <div class="links">
+        <a href="ldfreecam.png" target="_blank">Preview</a>
+        <a href="ldfreecam.prx" target="_blank">Download</a>
+        <a href="ldfreecam.cpp" target="_blank">Source Code</a>
+        <a href="https://www.virustotal.com/gui/file/4fdb7da8a8bde2061797f2fde6f8283a212db183d631b3ec63fdc6c89ebc5fb3" target="_blank">VirusTotal</a>
+      </div>
+    </div>
+    <hr>
+    <div class="footer">
+      <span>cr7jrsuii.github.io/mods</span>
+      <iframe src="https://www.youtube.com/subscribe_embed?channelid=UC4xtww2ppmmFnmOl3-C0owQ&layout=default"
+        width="114" height="24" frameborder="0" title="Subscribe to Meatboxing on YouTube"></iframe>
+    </div>
+  </main>
+  <script>
+    function Download(url) {
+      fetch(url).then(r => r.blob()).then(blob => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = url.split('/').pop();
+        a.click();
+      }).catch(() => alert('Download failed'));
+    }
+    document.querySelector('a[href="ldfreecam.prx"]').onclick = e => { e.preventDefault(); Download('ldfreecam.prx'); };
+  </script>
+</body>
+
+</html>
